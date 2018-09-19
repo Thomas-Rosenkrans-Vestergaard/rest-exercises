@@ -28,7 +28,7 @@ function PersonTable(container) {
     }
 
     this.createHeaders = function () {
-        var tableHeaders = ["ID", "First name", "Last name", "Phone number", "Delete", "Update"];
+        var tableHeaders = ["ID", "First name", "Last name", "Phone number", "Addresses", "Delete", "Update"];
         tableHeaders.forEach(function (name) {
             var th = document.createElement("th");
             th.innerText = name;
@@ -55,9 +55,21 @@ function PersonTable(container) {
         var tr = document.createElement("tr");
         Object.values(person).forEach(function (v, i) {
             var td = document.createElement("td");
-            if (i != 0)
+            var type = typeof v;
+            if (type != 'object' && i != 0)
                 td.contentEditable = true;
-            td.innerText = v;
+
+            if (type == 'object') {
+                var ul = document.createElement("ul");
+                v.forEach(function (address) {
+                    var li = document.createElement("li");
+                    li.innerHTML = Object.values(address).join(", ");
+                    ul.appendChild(li);
+                });
+                td.appendChild(ul);
+            } else {
+                td.innerText = v;
+            }
             tr.appendChild(td);
         });
 
