@@ -1,0 +1,73 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Open Sans";
+}
+
+#container {
+    margin: 0 auto;
+    margin: 20px;
+}
+
+table {
+    table-layout: fixed;
+    width: 100%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table button {
+    width: 100%;
+}
+
+table thead {
+    background: #efefef;
+}
+
+td, th {
+    padding: 20px;
+    text-align: left;
+}
+
+table tbody tr {
+    border-bottom: 1px solid #efefef;
+}
+
+button {
+    background: orange;
+    border: none;
+    color: white;
+    padding: 10px;
+    min-width: 100px;
+}
+
+button:not(:first-of-type) {
+    margin-left: 20px;
+}
+
+#table-add-container {
+    width: 80%;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    height: 340px;
+    background: orange;
+    padding: 20px;
+    box-sizing: border-box;
+    -webkit-box-shadow: -1px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -1px 0px 5px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: -1px 0px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+input {
+    border: none;
+    padding: 20px;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 20px;
+}

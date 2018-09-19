@@ -59,6 +59,9 @@ public class PersonResource
     public Response put(@PathParam("id") int id, String json)
     {
         Person person = jsonConverter.getPersonFromJson(json);
+        if (person == null)
+            return Response.status(422).build();
+
         person.setId(id);
         person = persistence.editPerson(person);
 
