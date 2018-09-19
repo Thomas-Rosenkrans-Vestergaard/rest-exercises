@@ -1,6 +1,5 @@
 package com.tvestergaard.rest;
 
-import com.tvestergaard.rest.JPAPersonFacade;
 import com.tvestergaard.rest.entities.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,5 +67,27 @@ public class JPAPersonFacadeTest
         person.setFirstName("d");
         person = instance.editPerson(person);
         assertEquals("d", person.getFirstName());
+    }
+
+    @Test
+    public void getPersonDTO()
+    {
+        PersonDTO personDTO = instance.getPersonDTO(1);
+
+        assertEquals(1, personDTO.id);
+        assertEquals("Thomas", personDTO.firstName);
+        assertEquals("Vestergaard", personDTO.lastName);
+        assertEquals("26508830", personDTO.phone);
+        assertEquals("Stationsvej", personDTO.addresses.get(0).street);
+        assertEquals("Hovedvej", personDTO.addresses.get(1).street);
+    }
+
+    @Test
+    public void getAllPersonDTOs()
+    {
+        List<PersonDTO> personDTOS = instance.getAllPersonDTOs();
+
+        assertTrue(personDTOS.size() >= 4);
+        assertEquals("Thomas", personDTOS.get(0).firstName);
     }
 }

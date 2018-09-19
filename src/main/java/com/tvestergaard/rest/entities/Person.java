@@ -1,6 +1,8 @@
 package com.tvestergaard.rest.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -24,6 +26,9 @@ public class Person
 
     @Column(nullable = false, length = 8)
     private String phone;
+
+    @ManyToMany(mappedBy = "persons", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Collection<Address> addresses = new ArrayList<>();
 
     public Person()
     {
@@ -79,6 +84,22 @@ public class Person
     {
         this.phone = phone;
         return this;
+    }
+
+    public Collection<Address> getAddresses()
+    {
+        return this.addresses;
+    }
+
+    public Person setAddresses(Collection<Address> addresses)
+    {
+        this.addresses = addresses;
+        return this;
+    }
+
+    public void addAddress(Address address)
+    {
+        this.addresses.add(address);
     }
 
     @Override public boolean equals(Object o)

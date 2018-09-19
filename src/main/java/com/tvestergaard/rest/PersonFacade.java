@@ -12,7 +12,11 @@ public interface PersonFacade
 
     Person getPerson(int id);
 
+    PersonDTO getPersonDTO(int id);
+
     List<Person> getAllPersons();
+
+    List<PersonDTO> getAllPersonDTOs();
 
     Person editPerson(Person p);
 }

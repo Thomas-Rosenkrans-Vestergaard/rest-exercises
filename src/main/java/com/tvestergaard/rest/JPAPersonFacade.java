@@ -4,6 +4,7 @@ import com.tvestergaard.rest.entities.Person;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 public class JPAPersonFacade implements PersonFacade
@@ -91,6 +92,33 @@ public class JPAPersonFacade implements PersonFacade
 
             return entityManager.find(Person.class, p.getId());
 
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override public PersonDTO getPersonDTO(int id)
+    {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            return entityManager.createQuery("SELECT NEW com.tvestergaard.rest.PersonDTO(p) FROM Person p WHERE p.id = :id", PersonDTO.class)
+                                .setParameter("id", id)
+                                .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override public List<PersonDTO> getAllPersonDTOs()
+    {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+            return entityManager.createQuery("SELECT NEW com.tvestergaard.rest.PersonDTO(p) FROM Person p", PersonDTO.class)
+                                .getResultList();
         } finally {
             entityManager.close();
         }
