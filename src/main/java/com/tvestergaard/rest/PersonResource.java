@@ -3,13 +3,14 @@ package com.tvestergaard.rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tvestergaard.rest.entities.Person;
+import com.tvestergaard.rest.exceptions.PersonNotFoundException;
+import com.tvestergaard.rest.exceptions.ValidationException;
 
 import javax.persistence.Persistence;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
 @Path("person")
 public class PersonResource
@@ -35,7 +36,7 @@ public class PersonResource
         PersonDTO person = persistence.getPersonDTO(id);
 
         if (person == null)
-            return Response.status(NOT_FOUND).build();
+            throw new PersonNotFoundException();
 
         return Response.ok()
                        .entity(gson.toJson(person))
@@ -48,6 +49,16 @@ public class PersonResource
     public Response post(String json)
     {
         Person person = gson.fromJson(json, Person.class);
+
+        if (person == null)
+            throw new ValidationException("Missing or malformed body.");
+        if (person.getFirstName() == null)
+            throw new ValidationException("Missing first name.");
+        if (person.getLastName() == null)
+            throw new ValidationException("Missing last name.");
+        if (person.getPhone() == null)
+            throw new ValidationException("Missing phone number.");
+
         person = persistence.addPerson(person);
         return Response.status(CREATED)
                        .entity(gson.toJson(new PersonDTO(person)))
@@ -62,13 +73,19 @@ public class PersonResource
     {
         Person person = gson.fromJson(json, Person.class);
         if (person == null)
-            return Response.status(422).build();
+            throw new ValidationException("Missing or malformed body.");
+        if (person.getFirstName() == null)
+            throw new ValidationException("Missing first name.");
+        if (person.getLastName() == null)
+            throw new ValidationException("Missing last name.");
+        if (person.getPhone() == null)
+            throw new ValidationException("Missing phone number.");
 
         person.setId(id);
         person = persistence.editPerson(person);
 
         if (person == null)
-            return Response.status(NOT_FOUND).build();
+            throw new PersonNotFoundException();
 
         return Response.ok(gson.toJson(new PersonDTO(person))).build();
     }
@@ -80,9 +97,18 @@ public class PersonResource
     {
         Person person = persistence.deletePerson(id);
 
-        if (person == null)
-            return Response.status(NOT_FOUND).build();
+        if (person == null) {
+            throw new PersonNotFoundException();
+        }
 
-        return Response.status(204).build();
+        PersonDTO personDTO = persistence.getPersonDTO(id);
+        return Response.status(204).entity(gson.toJson(personDTO)).build();
+    }
+
+    @Path("exception")
+    @Produces("application/json;charset=utf-8")
+    public Response delete() throws Exception
+    {
+        throw new Exception("test");
     }
 }

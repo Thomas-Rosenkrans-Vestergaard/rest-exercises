@@ -28,10 +28,38 @@ function PersonTable(container) {
     }
 
     this.createHeaders = function () {
-        var tableHeaders = ["ID", "First name", "Last name", "Phone number", "Addresses", "Delete", "Update"];
-        tableHeaders.forEach(function (name) {
+
+        var tableHeaders = [
+            {
+                name: "ID",
+                apply: function (e) {
+                    e.style.width = '30px';
+                    e.style.textAlign = 'center';
+                }
+            },
+            {name: "First name"},
+            {name: "Last name"},
+            {name: "Phone number"},
+            {name: "Addresses"},
+            {
+                name: "",
+                apply: function (e) {
+                    e.style.width = '90px';
+                }
+            },
+            {
+                name: "",
+                apply: function (e) {
+                    e.style.width = '90px';
+                }
+            }
+        ];
+
+        tableHeaders.forEach(function (header) {
             var th = document.createElement("th");
-            th.innerText = name;
+            th.innerText = header.name;
+            if (header.apply != undefined)
+                header.apply(th);
             root.tableHeadElement.appendChild(th);
         });
     };
@@ -42,6 +70,7 @@ function PersonTable(container) {
     this.createRefreshButton = function () {
         var button = document.createElement("button");
         button.innerText = "REFRESH";
+        button.style.width = '100px';
         button.addEventListener("click", function () {
             root.clear();
             root.populate();
@@ -92,7 +121,7 @@ function PersonTable(container) {
 
         var editTd = document.createElement("td");
         var editButton = document.createElement("button");
-        editButton.innerText = "UPDATE";
+        editButton.innerText = "SAVE";
         editButton.addEventListener("click", function () {
 
             person["firstName"] = tr.childNodes[1].innerText;
@@ -127,6 +156,7 @@ function PersonTable(container) {
 
         var button = document.createElement("button");
         button.innerText = "NEW";
+        button.style.width = '100px';
         button.addEventListener("click", function () {
             document.getElementById("table-add-container").style.display = 'block';
         });
